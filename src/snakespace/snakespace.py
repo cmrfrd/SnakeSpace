@@ -9,12 +9,32 @@ class SnakeSpace(_collections_abc.Sequence):
     SnakeSpaces can also be operated on with other SnakeSpaces like namespaces
     """
     
-    def __init__(self, seq=[], seperator='.'):
+    def __init__(self, seq=[], seperator='.', prefix=False, suffix=False):
         """Initialize a SnakeSpace object
         """
-        self.___data = [] + seq
+
         self.__seperator = seperator
 
+        ## Initialize 
+        if isinstance(seq, str):
+            self.___data = seq.split(seperator)
+        elif isinstance(seq, SnakeSpace):
+            self.___data = seq.___data
+        else:
+            self.___data = seq
+
+        ## Add prefix based if it's a bool, else make it custom
+        if isinstance(prefix, bool):
+            self.__prefix = __seperator if prefix else ""
+        else:
+            self.__prefix = prefix
+
+        ## Add suffix based if it's a bool, else make it custom
+        if isinstance(suffix, bool):
+            self.__suffix = __seperator if suffix else ""
+        else:
+            self.__suffix = suffix
+    
     @property
     def seperator(self):
         """seperator is the value between each piece of data
@@ -31,20 +51,26 @@ class SnakeSpace(_collections_abc.Sequence):
     def __data(self):
         """Accessing the data joins it as a string
         """
-        return self.__seperator.join(self.___data)
+        return self.__prefix + self.__seperator.join(self.___data) + self.__suffix
         
     def __getattr__(self, attr):
         """Getting an attribute creates a new copy of SnakeSpace adding the attribute
         """
-        return SnakeSpace(self.___data + [attr], self.__seperator)
+        return SnakeSpace(self.___data + [attr], self.__seperator, self.__prefix, self.__suffix)
         
     def s(self, *args, **kwargs):
         """Create a new SnakeSpace adding the string representation of args/kwargs
         """
         result_str = list(args) + list(kwargs.values())
         if len(result_str):
-            return SnakeSpace(self.___data + [self.__seperator.join(map(str, result_str))], self.__seperator)
-        return SnakeSpace(self.___data, self.__seperator)
+            return SnakeSpace(SnakeSpace(self.___data + list(map(str, result_str))),
+                              self.__seperator,
+                              self.__prefix,
+                              self.__suffix)
+        return SnakeSpace(self.___data,
+                          self.__seperator,
+                          self.__prefix,
+                          self.__suffix)
     
     def __str__(self):
         """Return the string representation of the data
@@ -76,9 +102,6 @@ class SnakeSpace(_collections_abc.Sequence):
         """
         return hash(self.__data)
     
-    def __getnewargs__(self):
-        return (self.__data[:],)
-
     def __eq__(self, string):
         """Equate SnakeSpace data or the string
         """
@@ -140,38 +163,39 @@ class SnakeSpace(_collections_abc.Sequence):
         """Add SnakeSpace data together, otherwise string concat
         """
         if isinstance(other, SnakeSpace):
-            return SnakeSpace(self.___data + other.___data, self.__seperator)
+            return SnakeSpace(self.___data + other.___data,
+                              self.__seperator,
+                              self.__prefix,
+                              self.__suffix)
         return self.__data + str(other)
 
     def __radd__(self, other):
+        """Add snakespaces together like list concat, add string with string concat
+        """
         if isinstance(other, SnakeSpace):
-            return SnakeSpace(other.___data + self.___data, self.__seperator)
+            return SnakeSpace(other.___data + self.___data,
+                              other.__seperator,
+                              other.__prefix,
+                              other.__suffix)
         return str(other) + self.__data
 
-    def __mul__(self, n):
-        return self.__class__(self.__data*n)
-    __rmul__ = __mul__
-
     def __mod__(self, args):
-        return self.__data.startswith(str(args))
-
-    def __rmod__(self, template):
-        return str(template) % self
+        """Check if arg is the start of a snakespace without the prefix
+        """
+        return self.startswith(args)
     
     # the following methods are defined in alphabetical order:
     def capitalize(self):
-        return self.__class__(self.__data.capitalize())
+        return SnakeSpace(list(s.capitalize() for s in self.___data),
+                          self.__seperator,
+                          self.__prefix,
+                          self.__suffix)
 
     def casefold(self):
-        return self.__class__(self.__data.casefold())
-
-    def center(self, width, *args):
-        return self.__class__(self.__data.center(width, *args))
-
-    def count(self, sub, start=0, end=sys.maxsize):
-        if isinstance(sub, SnakeSpace):
-            sub = sub.__data
-        return self.__data.count(sub, start, end)
+        return SnakeSpace(list(s.casefold() for s in self.___data),
+                          self.__seperator,
+                          self.__prefix,
+                          self.__suffix)
 
     def encode(self, encoding='utf-8', errors='strict'):
         encoding = 'utf-8' if encoding is None else encoding
@@ -179,107 +203,185 @@ class SnakeSpace(_collections_abc.Sequence):
         return self.__data.encode(encoding, errors)
 
     def endswith(self, suffix, start=0, end=sys.maxsize):
+        if isinstance(suffix, SnakeSpace):
+            return SnakeSpace(self.___data[start:end][-len(suffix):],
+                              self.__seperator,
+                              suffix.__prefix,
+                              suffix.__suffix) == suffix
         return self.__data.endswith(suffix, start, end)
 
-    def expandtabs(self, tabsize=8):
-        return self.__class__(self.__data.expandtabs(tabsize))
-
     def find(self, sub, start=0, end=sys.maxsize):
-        if isinstance(sub, SnakeSpace):
-            sub = sub.__data
-        return self.__data.find(sub, start, end)
-
-    def format(self, /, *args, **kwds):
-        return self.__data.format(*args, **kwds)
-
-    def format_map(self, mapping):
-        return self.__data.format_map(mapping)
+        """Find which space sub can be found in
+        """
+        return next((i for i, s in enumerate(self.___data)
+                     if s[start:end].find(str(sub)) >= 0), -1)
 
     def index(self, sub, start=0, end=sys.maxsize):
-        return self.__data.index(sub, start, end)
+        """Index without seperatros or normal string
+        """
+        result = self.find(sub, start, end)
+        if result == -1:
+            raise ValueError("Cannot find index for substring")
+        return result
 
-    def isalpha(self): return self.__data.isalpha()
+    def isalpha(self):
+        return all(map(lambda s:s.isalpha(), self.___data))
 
-    def isalnum(self): return self.__data.isalnum()
+    def isalnum(self):
+        return all(map(lambda s:s.isalnum(), self.___data))
 
-    def isascii(self): return self.__data.isascii()
+    def isascii(self):
+        return all(map(lambda s:s.isascii(), self.___data))
 
-    def isdecimal(self): return self.__data.isdecimal()
+    def isdecimal(self):
+        return all(map(lambda s:s.isdecimal(), self.___data))
 
-    def isdigit(self): return self.__data.isdigit()
+    def isdigit(self):
+        return all(map(lambda s:s.isdigit(), self.___data))
 
-    def isidentifier(self): return self.__data.isidentifier()
+    def isidentifier(self):
+        return all(map(lambda s:s.isidentifier(), self.___data))
 
-    def islower(self): return self.__data.islower()
+    def islower(self):
+        return all(map(lambda s:s.islower(), self.___data))
 
-    def isnumeric(self): return self.__data.isnumeric()
+    def isnumeric(self):
+        return all(map(lambda s:s.isnumeric(), self.___data))
 
-    def isprintable(self): return self.__data.isprintable()
+    def isprintable(self):
+        return all(map(lambda s:s.isprintable(), self.___data))
 
-    def isspace(self): return self.__data.isspace()
+    def isspace(self):
+        return all(map(lambda s:s.isspace(), self.___data))
 
-    def istitle(self): return self.__data.istitle()
+    def istitle(self): return all(map(lambda s:s.istitle(), self.___data))
 
-    def isupper(self): return self.__data.isupper()
-
-    def join(self, seq): return self.__data.join(seq)
+    def isupper(self): return all(map(lambda s:s.isupper(), self.___data))
 
     def ljust(self, width, *args):
-        return self.__class__(self.__data.ljust(width, *args))
+        return SnakeSpace(list(s.ljust(width, *args) for s in self.___data),
+                          self.__seperator,
+                          self.__prefix,
+                          self.__suffix)
 
-    def lower(self): return self.__class__(self.__data.lower())
+    def lower(self):
+        return SnakeSpace(list(s.lower() for s in self.___data),
+                          self.__seperator,
+                          self.__prefix,
+                          self.__suffix)
 
-    def lstrip(self, chars=None): return self.__class__(self.__data.lstrip(chars))
+    def lstrip(self, chars=None):
+        return SnakeSpace(list(s.lstrip() for s in self.___data),
+                          self.__seperator,
+                          self.__prefix,
+                          self.__suffix)
 
-    maketrans = str.maketrans
+    def partition(self, sep=None):
+        """Partition each element and create a new SnakeSpace from the partitions
+        """
+        if sep == None:
+            return self
 
-    def partition(self, sep):
-        return self.__data.partition(sep)
+        elements = list(list(filter(lambda s:s, s.partition(str(sep)))) for s in self.___data)
+        return SnakeSpace(sum(elements, []),
+                          self.__seperator,
+                          self.__prefix,
+                          self.__suffix)
 
-    def replace(self, old, new, maxsplit=-1):
-        if isinstance(old, SnakeSpace):
-            old = old.__data
-        if isinstance(new, SnakeSpace):
-            new = new.__data
-        return self.__class__(self.__data.replace(old, new, maxsplit))
+    def replace(self, old, new, maxsplit=sys.maxsize):
+        """Replace spaces in SnakeSpace that match 'old' with 'new' in the same position 
+        """
+        indexes = list(i for i, s in enumerate(self.___data)
+                       if s.find(str(old)) >= 0)
+
+        if len(indexes):
+            [self.___data.__setitem__(i, str(new)) for i in indexes[:maxsplit]]
+        return self
 
     def rfind(self, sub, start=0, end=sys.maxsize):
-        if isinstance(sub, SnakeSpace):
-            sub = sub.__data
-        return self.__data.rfind(sub, start, end)
-
+        """Find which space sub can be found in, from the right
+        """
+        return next((i for i, s in reversed(list(enumerate(self.___data)))
+                     if s[start:end].find(str(sub)) >= 0), -1)
+    
     def rindex(self, sub, start=0, end=sys.maxsize):
-        return self.__data.rindex(sub, start, end)
+        """Index which space sub can be found in, from the right
+        """
+        result = self.rfind(sub, start, end)
+        if result == -1:
+            raise ValueError("Cannot find index for substring")
+        return result
 
     def rjust(self, width, *args):
-        return self.__class__(self.__data.rjust(width, *args))
+        return SnakeSpace(list(s.rjust(width, *args) for s in self.___data),
+                          self.__seperator,
+                          self.__prefix,
+                          self.__suffix)
 
-    def rpartition(self, sep):
-        return self.__data.rpartition(sep)
+    def rpartition(self, sep=None):
+        if sep == None:
+            return self
+
+        elements = list(list(filter(lambda s:s, s.rpartition(str(sep))))
+                        for s in self.___data[::-1])
+        return SnakeSpace(sum(elements[::-1], []),
+                          self.__seperator,
+                          self.__prefix,
+                          self.__suffix)
 
     def rstrip(self, chars=None):
-        return self.__class__(self.__data.rstrip(chars))
-
-    def split(self, sep=None, maxsplit=-1):
-        return self.__data.split(sep, maxsplit)
-
-    def rsplit(self, sep=None, maxsplit=-1):
-        return self.__data.rsplit(sep, maxsplit)
-    def splitlines(self, keepends=False): return self.__data.splitlines(keepends)
-    
+        return SnakeSpace(list(s.rstrip() for s in self.___data),
+                          self.__seperator,
+                          self.__prefix,
+                          self.__suffix)    
 
     def startswith(self, prefix, start=0, end=sys.maxsize):
-        return self.__data.startswith(prefix, start, end)
+        """Same at str.startswith but with string representation of __data
+        """
+        space = SnakeSpace(self.___data[start:end][:len(prefix)],
+                           self.__seperator,
+                           self.__prefix,
+                           self.__suffix)
+        if isinstance(prefix, SnakeSpace):
+            return space == prefix
+        return str(space) == prefix
 
-    def strip(self, chars=None): return self.__class__(self.__data.strip(chars))
+    def strip(self, chars=None):
+        return SnakeSpace(list(s.strip(chars) for s in self.___data),
+                          self.__seperator,
+                          self.__prefix,
+                          self.__suffix)    
 
-    def swapcase(self): return self.__class__(self.__data.swapcase())
+    def swapcase(self):
+        return SnakeSpace(list(s.swapcase() for s in self.___data),
+                          self.__seperator,
+                          self.__prefix,
+                          self.__suffix)
 
-    def title(self): return self.__class__(self.__data.title())
-
+    def title(self):
+        return SnakeSpace(list(s.title() for s in self.___data),
+                          self.__seperator,
+                          self.__prefix,
+                          self.__suffix)
+        
     def translate(self, *args):
-        return self.__class__(self.__data.translate(*args))
+        space = list(s.translate(s.maketrans(*map(str,args)))
+                     for s in self.___data
+                     if len(s.translate(s.maketrans(*map(str,args)))) > 0)
+        return SnakeSpace(space,
+                          self.__seperator,
+                          self.__prefix,
+                          self.__suffix)
 
-    def upper(self): return self.__class__(self.__data.upper())
+    def upper(self):
+        return SnakeSpace(list(s.upper() for s in self.___data),
+                          self.__seperator,
+                          self.__prefix,
+                          self.__suffix)
 
-    def zfill(self, width): return self.__class__(self.__data.zfill(width))
+
+    def zfill(self, width):
+        return SnakeSpace(list(s.zfill(width) for s in self.___data),
+                          self.__seperator,
+                          self.__prefix,
+                          self.__suffix)

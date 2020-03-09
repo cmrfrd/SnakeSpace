@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from pkg_resources import get_distribution, DistributionNotFound
 
-from .snakestring import SnakeString
+from .snakespace import SnakeSpace
 
 try:
     # Change here if project is renamed and does not equal the package name
