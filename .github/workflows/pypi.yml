@@ -12,13 +12,13 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.7
+      - name: Test snakespace
+        run: >-
+          python setup.py test
       - name: Build snakespace
         run: >-
           python setup.py
-          build
-          --source
-          --binary
-          --out-dir dist/
+          sdist bdist_wheel
       - name: Publish distribution 📦 to Test PyPI
         uses: pypa/gh-action-pypi-publish@master
         with:
