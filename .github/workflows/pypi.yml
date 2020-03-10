@@ -14,7 +14,7 @@ jobs:
           python-version: 3.7
       - name: Install pyscaffold dep
         run: >-
-          pip3.8 install pyscaffold[all]
+          python -m pip install pyscaffold[all]
       - name: Test snakespace
         run: >-
           python setup.py test
