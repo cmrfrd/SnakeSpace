@@ -7,7 +7,7 @@
 
 [![Actions Status](https://github.com/cmrfrd/SnakeSpace/workflows/pypi/badge.svg)](https://github.com/cmrfrd/SnakeSpace/actions)
 
-#SnakeSpace
+# SnakeSpace
 
 `SnakeSpace` is a module for building for composable labeled namespaces from [attribute chaining](https://en.wikipedia.org/wiki/Method_chaining) and args/kwargs
 
