@@ -9,7 +9,7 @@
 
 #SnakeSpace
 
-`SnakeSpace` is a module for building for composable namespace identifiers from [attribute chaining](https://en.wikipedia.org/wiki/Method_chaining) and args/kwargs
+`SnakeSpace` is a module for building for composable labeled namespaces from [attribute chaining](https://en.wikipedia.org/wiki/Method_chaining) and args/kwargs
 
 ### Examples and Behavior
 
@@ -65,13 +65,13 @@ print(S.potato in S.a)          # -> False
 print(S.data.s(1,2) in S.data)  # -> True
 ```
 
-`SnakeSpace`s can be compared and composed
+`SnakeSpace`s can be compared, composed, and operaded on
 
 ``` text
 from snakespace import SnakeSpace
 S = SnakeSpace()
 
-# order
+# order (lexicographic)
 print(S.one < S.one.two)           # -> True
 print(S.a.b.c > S.a.b > S.a)       # -> True
 
@@ -88,12 +88,20 @@ print(len(S.apple.bannana.cherry)) # -> 3
 print(S.a.b.c[1])                  # -> 'b'
 
 # superspace
-print(S.a.b.c % S.a)               # -> True
-print(S.a.b.c % S.a.b.c.d)         # -> False
+print(S.a % S.a.b.c)               # -> True
+print(S.a.b.c.d % S.a.b.c)         # -> False
 ```
 
 `Snakespace` also comes with multiple common python `str` methods that are applied element wise in a `Snakespace` opposed to being operated on the whole resulting string.
 
+### Limitations
+
+`SnakeSpace` objects have some reserved attributes that cannot be used to building namespace labels.
+
+    1. `seperator` which is used to configure what string will be used to seperate spaces
+    2. Any [dunder methods/attributes](https://stackoverflow.com/questions/1418825/where-is-the-python-documentation-for-the-special-methods-init-new)
+
+It's best just to avoid building anything with a start of a double underscore
 
 ### Fun examples
 
@@ -110,12 +118,3 @@ for i in range(10):
 
 
 ```
-
-### Limitations
-
-*Special attributes:* SnakeSpace objects have some special attributes that cannot be used to build labels.
-
-    1. `seperator` which is used to configure what string will be used to seperate spaces
-    2. Any [dunder methods/attributes](https://stackoverflow.com/questions/1418825/where-is-the-python-documentation-for-the-special-methods-init-new)
-
-It's best just to avoid building anything with a start of a double underscore

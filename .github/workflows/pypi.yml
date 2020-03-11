@@ -18,6 +18,13 @@ jobs:
       - name: Test snakespace
         run: >-
           python setup.py test
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          name: codecov
+          fail_ci_if_error: true
       - name: Build snakespace
         run: >-
           python setup.py
