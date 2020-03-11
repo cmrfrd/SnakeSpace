@@ -13,9 +13,9 @@
 
 ### Why
 
-Creating a good label for a file or a key is [hard](https://xkcd.com/1459/). In Python, labels are either made via string concatenation or [format strings](https://www.python.org/dev/peps/pep-0498/). Now format strings are great! However they can get pretty specialized, you also have to include those persky `f` and `{}` characters. Now there is a better and easier way with `SnakeSpace`!
+Creating a good label for a file or a key is [hard](https://xkcd.com/1459/). In Python, labels are either made via string concatenation or [format strings](https://www.python.org/dev/peps/pep-0498/). Now format strings are great! However they can get pretty specialized, you also have to include those pesky `f` and `{}` characters. Now there is a better and easier way with `SnakeSpace`!
 
-With `SnakeSpace` you type just what you want as a chain of attributes! The expression `S.yo.hey.woohoo` is totally valid! Now labels can be created with ease! Or atleast in a different style...
+With `SnakeSpace` you type just what you want as a chain of attributes! The expression `S.yo.hey.woohoo` is totally valid! Now labels can be created with ease! Or at least in a different style...
 
 ### Installing
 
@@ -57,18 +57,18 @@ print(S.yay.kwargs.s(1, 2, third=3)) # -> 'yay.kwargs.1.2.3'
 print(S.shoop.s('da').whoop) # -> 'shoop.da.whoop'
 ```
 
-If you don't like using periods as the default seperator, you can change it using the *special* attribute `seperator`
+If you don't like using periods as the default separator, you can change it using the *special* attribute `separator`
 
 ``` python
 from snakespace import SnakeSpace
 S = SnakeSpace()
 
 print(S.a.b.c)    # -> 'a.b.c'
-S.seperator = '/'
+S.separator = '/'
 print(S.a.b.c)    # -> 'a/b/c'
 ```
 
-~Note!~ You can't chain attributes with `.seperator`
+~Note!~ You can't chain attributes with `.separator`
 
 
 ### Namespacing
@@ -90,7 +90,7 @@ print(S.potato in S.a)          # -> False
 print(S.data.s(1,2) in S.data)  # -> True
 ```
 
-`SnakeSpace`s can be compared, composed, and operaded on
+`SnakeSpace`s can be compared, composed, and operated on
 
 ``` python
 from snakespace import SnakeSpace
@@ -123,7 +123,7 @@ print(S.a.b.c.d % S.a.b.c)         # -> False
 
 `SnakeSpace` objects have some reserved attributes that cannot be used to building namespace labels.
 
-    1. `seperator` which is used to configure what string will be used to seperate spaces
+    1. `separator` which is used to configure what string will be used to separate spaces
     2. Any [dunder methods/attributes](https://stackoverflow.com/questions/1418825/where-is-the-python-documentation-for-the-special-methods-init-new)
 
 It's best just to avoid building anything with a start of a double underscore
