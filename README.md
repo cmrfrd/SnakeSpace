@@ -9,7 +9,13 @@
 
 # SnakeSpace
 
-`SnakeSpace` is a module for building for composable label namespaces from [attribute chaining](https://en.wikipedia.org/wiki/Method_chaining) and args/kwargs
+`SnakeSpace` is a module for building label namespaces from [attribute chaining](https://en.wikipedia.org/wiki/Method_chaining) and args/kwargs
+
+### Why
+
+Creating a good label for a file or a key is [hard](https://xkcd.com/1459/). In Python, labels are either made via string concatenation or [format strings](https://www.python.org/dev/peps/pep-0498/). Now format strings are great! However they can get pretty specialized, you also have to include those persky `f` and `{}` characters. Now there is a better and easier way with `SnakeSpace`!
+
+With `SnakeSpace` you type just what you want as a chain of attributes! The expression `S.yo.hey.woohoo` is totally valid! Now labels can be created with ease! Or atleast in a different style...
 
 ### Installing
 
