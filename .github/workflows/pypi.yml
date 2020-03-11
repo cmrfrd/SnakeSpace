@@ -1,9 +1,7 @@
 name: Publish Python 🐍 distributions 📦 to PyPI
 
-on:
-  push:
-    tags:
-      - 'v*.*.*'
+on: push
+
 jobs:
   build-n-publish:
     name: Build and publish Python 🐍 distributions 📦 to PyPI
@@ -25,6 +23,7 @@ jobs:
           python setup.py
           sdist bdist_wheel
       - name: Publish distribution 📦 to PyPI
+        if: startsWith(github.ref, 'refs/tags/')
         uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{ secrets.pypi_token }}
