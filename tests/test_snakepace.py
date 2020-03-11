@@ -59,23 +59,23 @@ def test_inter_snakespace():
     assert (S.a.s(asdf=S.a) == "a.a")
     assert (S.a.s(asdf=S.a).qwer == "a.a.qwer")
 
-def test_seperator_snakespace_access():
+def test_separator_snakespace_access():
     S = SnakeSpace()
-    S.seperator = "_"
-    assert (S.seperator == "_")
-    S.seperator = "."
-    assert (S.seperator == ".")
+    S.separator = "_"
+    assert (S.separator == "_")
+    S.separator = "."
+    assert (S.separator == ".")
     
 def test_sep_snakespace():
     S = SnakeSpace()
-    S.seperator = "_"
+    S.separator = "_"
     assert (S == "")
     assert (str(S) == "")
     assert (S.a == "a")
     assert (S.a.b == "a_b")
     assert (S.a.b.c == "a_b_c")
     assert (S.a.s().c == "a_c")
-    S.seperator = "."
+    S.separator = "."
 
 def test_prefix_snakespace():
     S = SnakeSpace(prefix="@")
@@ -176,9 +176,9 @@ def test_snakespace_str_methods():
     # capitalize
     S = SnakeSpace()
     assert (S.a.b.c.capitalize() == S.A.B.C)
-    S.seperator = 'a'
+    S.separator = 'a'
     assert (S.a.b.c.capitalize() == "AaBaC")
-    S.seperator = '.'    
+    S.separator = '.'    
     S = SnakeSpace(prefix='a')
     assert (S.a.b.c.capitalize() == "aA.B.C")
     S = SnakeSpace(suffix='a')
@@ -187,9 +187,9 @@ def test_snakespace_str_methods():
     # casefold
     S = SnakeSpace()
     assert (S.A.B.C.casefold() == S.a.b.c)
-    S.seperator = 'a'
+    S.separator = 'a'
     assert (S.A.B.C.casefold() == "aabac")
-    S.seperator = '.'    
+    S.separator = '.'    
     S = SnakeSpace(prefix='a')
     assert (S.A.B.C.casefold() == "aa.b.c")
     S = SnakeSpace(suffix='a')

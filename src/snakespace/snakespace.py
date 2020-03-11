@@ -9,15 +9,15 @@ class SnakeSpace(_collections_abc.Sequence):
     SnakeSpaces can also be operated on with other SnakeSpaces like namespaces
     """
     
-    def __init__(self, seq=[], seperator='.', prefix=False, suffix=False):
+    def __init__(self, seq=[], separator='.', prefix=False, suffix=False):
         """Initialize a SnakeSpace object
         """
 
-        self.__seperator = seperator
+        self.__separator = separator
 
         ## Initialize 
         if isinstance(seq, str):
-            self.___data = seq.split(seperator)
+            self.___data = seq.split(separator)
         elif isinstance(seq, SnakeSpace):
             self.___data = seq.___data
         else:
@@ -25,38 +25,38 @@ class SnakeSpace(_collections_abc.Sequence):
 
         ## Add prefix based if it's a bool, else make it custom
         if isinstance(prefix, bool):
-            self.__prefix = __seperator if prefix else ""
+            self.__prefix = __separator if prefix else ""
         else:
             self.__prefix = prefix
 
         ## Add suffix based if it's a bool, else make it custom
         if isinstance(suffix, bool):
-            self.__suffix = __seperator if suffix else ""
+            self.__suffix = __separator if suffix else ""
         else:
             self.__suffix = suffix
     
     @property
-    def seperator(self):
-        """seperator is the value between each piece of data
+    def separator(self):
+        """separator is the value between each piece of data
         """
-        return self.__seperator
+        return self.__separator
     
-    @seperator.setter
-    def seperator(self, val):
-        """set the value for the seperator
+    @separator.setter
+    def separator(self, val):
+        """set the value for the separator
         """
-        self.__seperator = val
+        self.__separator = val
     
     @property
     def __data(self):
         """Accessing the data joins it as a string
         """
-        return self.__prefix + self.__seperator.join(self.___data) + self.__suffix
+        return self.__prefix + self.__separator.join(self.___data) + self.__suffix
         
     def __getattr__(self, attr):
         """Getting an attribute creates a new copy of SnakeSpace adding the attribute
         """
-        return SnakeSpace(self.___data + [attr], self.__seperator, self.__prefix, self.__suffix)
+        return SnakeSpace(self.___data + [attr], self.__separator, self.__prefix, self.__suffix)
         
     def s(self, *args, **kwargs):
         """Create a new SnakeSpace adding the string representation of args/kwargs
@@ -64,11 +64,11 @@ class SnakeSpace(_collections_abc.Sequence):
         result_str = list(args) + list(kwargs.values())
         if len(result_str):
             return SnakeSpace(SnakeSpace(self.___data + list(map(str, result_str))),
-                              self.__seperator,
+                              self.__separator,
                               self.__prefix,
                               self.__suffix)
         return SnakeSpace(self.___data,
-                          self.__seperator,
+                          self.__separator,
                           self.__prefix,
                           self.__suffix)
     
@@ -164,7 +164,7 @@ class SnakeSpace(_collections_abc.Sequence):
         """
         if isinstance(other, SnakeSpace):
             return SnakeSpace(self.___data + other.___data,
-                              self.__seperator,
+                              self.__separator,
                               self.__prefix,
                               self.__suffix)
         return self.__data + str(other)
@@ -174,7 +174,7 @@ class SnakeSpace(_collections_abc.Sequence):
         """
         if isinstance(other, SnakeSpace):
             return SnakeSpace(other.___data + self.___data,
-                              other.__seperator,
+                              other.__separator,
                               other.__prefix,
                               other.__suffix)
         return str(other) + self.__data
@@ -187,13 +187,13 @@ class SnakeSpace(_collections_abc.Sequence):
     # the following methods are defined in alphabetical order:
     def capitalize(self):
         return SnakeSpace(list(s.capitalize() for s in self.___data),
-                          self.__seperator,
+                          self.__separator,
                           self.__prefix,
                           self.__suffix)
 
     def casefold(self):
         return SnakeSpace(list(s.casefold() for s in self.___data),
-                          self.__seperator,
+                          self.__separator,
                           self.__prefix,
                           self.__suffix)
 
@@ -205,7 +205,7 @@ class SnakeSpace(_collections_abc.Sequence):
     def endswith(self, suffix, start=0, end=sys.maxsize):
         if isinstance(suffix, SnakeSpace):
             return SnakeSpace(self.___data[start:end][-len(suffix):],
-                              self.__seperator,
+                              self.__separator,
                               suffix.__prefix,
                               suffix.__suffix) == suffix
         return self.__data.endswith(suffix, start, end)
@@ -260,19 +260,19 @@ class SnakeSpace(_collections_abc.Sequence):
 
     def ljust(self, width, *args):
         return SnakeSpace(list(s.ljust(width, *args) for s in self.___data),
-                          self.__seperator,
+                          self.__separator,
                           self.__prefix,
                           self.__suffix)
 
     def lower(self):
         return SnakeSpace(list(s.lower() for s in self.___data),
-                          self.__seperator,
+                          self.__separator,
                           self.__prefix,
                           self.__suffix)
 
     def lstrip(self, chars=None):
         return SnakeSpace(list(s.lstrip() for s in self.___data),
-                          self.__seperator,
+                          self.__separator,
                           self.__prefix,
                           self.__suffix)
 
@@ -284,7 +284,7 @@ class SnakeSpace(_collections_abc.Sequence):
 
         elements = list(list(filter(lambda s:s, s.partition(str(sep)))) for s in self.___data)
         return SnakeSpace(sum(elements, []),
-                          self.__seperator,
+                          self.__separator,
                           self.__prefix,
                           self.__suffix)
 
@@ -314,7 +314,7 @@ class SnakeSpace(_collections_abc.Sequence):
 
     def rjust(self, width, *args):
         return SnakeSpace(list(s.rjust(width, *args) for s in self.___data),
-                          self.__seperator,
+                          self.__separator,
                           self.__prefix,
                           self.__suffix)
 
@@ -325,13 +325,13 @@ class SnakeSpace(_collections_abc.Sequence):
         elements = list(list(filter(lambda s:s, s.rpartition(str(sep))))
                         for s in self.___data[::-1])
         return SnakeSpace(sum(elements[::-1], []),
-                          self.__seperator,
+                          self.__separator,
                           self.__prefix,
                           self.__suffix)
 
     def rstrip(self, chars=None):
         return SnakeSpace(list(s.rstrip() for s in self.___data),
-                          self.__seperator,
+                          self.__separator,
                           self.__prefix,
                           self.__suffix)    
 
@@ -339,7 +339,7 @@ class SnakeSpace(_collections_abc.Sequence):
         """Same at str.startswith but with string representation of __data
         """
         space = SnakeSpace(self.___data[start:end][:len(prefix)],
-                           self.__seperator,
+                           self.__separator,
                            self.__prefix,
                            self.__suffix)
         if isinstance(prefix, SnakeSpace):
@@ -348,19 +348,19 @@ class SnakeSpace(_collections_abc.Sequence):
 
     def strip(self, chars=None):
         return SnakeSpace(list(s.strip(chars) for s in self.___data),
-                          self.__seperator,
+                          self.__separator,
                           self.__prefix,
                           self.__suffix)    
 
     def swapcase(self):
         return SnakeSpace(list(s.swapcase() for s in self.___data),
-                          self.__seperator,
+                          self.__separator,
                           self.__prefix,
                           self.__suffix)
 
     def title(self):
         return SnakeSpace(list(s.title() for s in self.___data),
-                          self.__seperator,
+                          self.__separator,
                           self.__prefix,
                           self.__suffix)
         
@@ -369,19 +369,19 @@ class SnakeSpace(_collections_abc.Sequence):
                      for s in self.___data
                      if len(s.translate(s.maketrans(*map(str,args)))) > 0)
         return SnakeSpace(space,
-                          self.__seperator,
+                          self.__separator,
                           self.__prefix,
                           self.__suffix)
 
     def upper(self):
         return SnakeSpace(list(s.upper() for s in self.___data),
-                          self.__seperator,
+                          self.__separator,
                           self.__prefix,
                           self.__suffix)
 
 
     def zfill(self, width):
         return SnakeSpace(list(s.zfill(width) for s in self.___data),
-                          self.__seperator,
+                          self.__separator,
                           self.__prefix,
                           self.__suffix)
