@@ -5,6 +5,10 @@
 ▀▀▀ ▀░░▀ ▀░░▀ ▀░▀ ▀▀▀ ▀▀▀ █▀▀▀ ▀░░▀ ▀▀▀ ▀▀▀  <____/     \____/
 </pre>
 
+[![Actions Status](https://github.com/cmrfrd/SnakeSpace/workflows/pypi/badge.svg)](https://github.com/cmrfrd/SnakeSpace/actions)
+
+#SnakeSpace
+
 `SnakeSpace` is a module for building for composable namespace identifiers from [attribute chaining](https://en.wikipedia.org/wiki/Method_chaining) and args/kwargs
 
 ### Examples and Behavior
