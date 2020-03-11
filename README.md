@@ -5,7 +5,7 @@
 ▀▀▀ ▀░░▀ ▀░░▀ ▀░▀ ▀▀▀ ▀▀▀ █▀▀▀ ▀░░▀ ▀▀▀ ▀▀▀  <____/     \____/
 </pre>
 
-![badge](https://action-badges.now.sh/cmrfrd/SnakeSpace/action-badges?workflow=pypi) [![Actions Status](https://github.com/cmrfrd/SnakeSpace/workflows/pypi/badge.svg)](https://github.com/cmrfrd/SnakeSpace/actions) [![codecov](https://codecov.io/gh/cmrfrd/SnakeSpace/branch/master/graph/badge.svg)](https://codecov.io/gh/cmrfrd/SnakeSpace) [![PyPI version](https://badge.fury.io/py/snakespace.svg)](https://badge.fury.io/py/snakespace)
+[![Actions Status](https://github.com/cmrfrd/SnakeSpace/workflows/pypi/badge.svg)](https://github.com/cmrfrd/SnakeSpace/actions) [![codecov](https://codecov.io/gh/cmrfrd/SnakeSpace/branch/master/graph/badge.svg)](https://codecov.io/gh/cmrfrd/SnakeSpace) [![PyPI version](https://badge.fury.io/py/snakespace.svg)](https://badge.fury.io/py/snakespace)
 
 # SnakeSpace
 
