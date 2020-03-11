@@ -13,7 +13,7 @@
 
 ### Why
 
-Creating a good label for a file or a key is [hard](https://xkcd.com/1459/). In Python, labels are either made via string concatenation or [format strings](https://www.python.org/dev/peps/pep-0498/). Now format strings are great! However they can get pretty specialized, you also have to include those pesky `f` and `{}` characters. Now there is a better and easier way with `SnakeSpace`!
+Creating a good label for a file or a key is [hard](https://xkcd.com/1459/). In Python, labels are either made via string concatenation or [format strings](https://www.python.org/dev/peps/pep-0498/). First and foremost, format strings are great! However they can get pretty specialized, you also have to include those pesky `f` and `{}` characters. Now there is a different with `SnakeSpace`!
 
 With `SnakeSpace` you type just what you want as a chain of attributes! The expression `S.yo.hey.woohoo` is totally valid! Now labels can be created with ease! Or at least in a different style...
 
