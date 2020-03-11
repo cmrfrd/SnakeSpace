@@ -19,7 +19,7 @@
 
 With `SnakeSpace` you can create namespace identifiers from chaining attributes.
 
-``` text
+``` python
 from snakespace import SnakeSpace
 S = SnakeSpace()
 
@@ -28,7 +28,7 @@ print(S.super.duper.cool) # -> 'super.duper.cool'
 
 You can also use the `s` function to supply custom arguments
 
-``` text
+``` python
 from snakespace import SnakeSpace
 S = SnakeSpace()
 
@@ -41,7 +41,7 @@ print(S.shoop.s('da').whoop) # -> 'shoop.da.whoop'
 
 If you don't like using periods as the default seperator, you can change it using the *special* attribute `seperator`
 
-``` text
+``` python
 from snakespace import SnakeSpace
 S = SnakeSpace()
 
@@ -60,7 +60,7 @@ print(S.a.b.c)    # -> 'a/b/c'
 
 You can see if a `SnakeSpace` is a subspace of another by using `in`
 
-``` text
+``` python
 from snakespace import SnakeSpace
 S = SnakeSpace()
 
@@ -71,7 +71,7 @@ print(S.data.s(1,2) in S.data)  # -> True
 
 `SnakeSpace`s can be compared, composed, and operaded on
 
-``` text
+``` python
 from snakespace import SnakeSpace
 S = SnakeSpace()
 
