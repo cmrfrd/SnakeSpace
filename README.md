@@ -5,19 +5,31 @@
 ▀▀▀ ▀░░▀ ▀░░▀ ▀░▀ ▀▀▀ ▀▀▀ █▀▀▀ ▀░░▀ ▀▀▀ ▀▀▀  <____/     \____/
 </pre>
 
-![badge](https://action-badges.now.sh/cmrfrd/SnakeSpace) [![Actions Status](https://github.com/cmrfrd/SnakeSpace/workflows/pypi/badge.svg)](https://github.com/cmrfrd/SnakeSpace/actions) [![codecov](https://codecov.io/gh/cmrfrd/SnakeSpace/branch/master/graph/badge.svg)](https://codecov.io/gh/cmrfrd/SnakeSpace) [![PyPI version](https://badge.fury.io/py/snakespace.svg)](https://badge.fury.io/py/snakespace)
+![badge](https://action-badges.now.sh/cmrfrd/SnakeSpace/action-badges?workflow=pypi) [![Actions Status](https://github.com/cmrfrd/SnakeSpace/workflows/pypi/badge.svg)](https://github.com/cmrfrd/SnakeSpace/actions) [![codecov](https://codecov.io/gh/cmrfrd/SnakeSpace/branch/master/graph/badge.svg)](https://codecov.io/gh/cmrfrd/SnakeSpace) [![PyPI version](https://badge.fury.io/py/snakespace.svg)](https://badge.fury.io/py/snakespace)
 
 # SnakeSpace
 
-`SnakeSpace` is a module for building for composable labeled namespaces from [attribute chaining](https://en.wikipedia.org/wiki/Method_chaining) and args/kwargs
+`SnakeSpace` is a module for building for composable label namespaces from [attribute chaining](https://en.wikipedia.org/wiki/Method_chaining) and args/kwargs
 
 ### Installing
 
+This repo uses setup.py, so it follows the standard Python install routine
 
+``` shell
+pip install -U snakespace
+```
+
+Or if you want to install from source
+
+``` shell
+git clone https://github.com/cmrfrd/SnakeSpace.git
+cd SnakeSpace
+python3 setup.py install
+```
 
 ### Examples and Behavior
 
-With `SnakeSpace` you can create namespace identifiers from chaining attributes.
+With `SnakeSpace` you can create label namespaces from chaining attributes.
 
 ``` python
 from snakespace import SnakeSpace
@@ -49,6 +61,9 @@ print(S.a.b.c)    # -> 'a.b.c'
 S.seperator = '/'
 print(S.a.b.c)    # -> 'a/b/c'
 ```
+
+~Note!~ You can't chain attributes with `.seperator`
+
 
 ### Namespacing
 
