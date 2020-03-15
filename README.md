@@ -1,4 +1,4 @@
-<pre>
+<pre width="1000">
                                                               __
 █▀▀ █▀▀▄ █▀▀█ █░█ █▀▀ █▀▀ █▀▀█ █▀▀█ █▀▀ █▀▀       _______    /*_>-<
 ▀▀█ █░░█ █▄▄█ █▀▄ █▀▀ ▀▀█ █░░█ █▄▄█ █░░ █▀▀   ___/ _____ \__/ /
@@ -123,10 +123,18 @@ print(S.a.b.c.d % S.a.b.c)         # -> False
 
 `SnakeSpace` objects have some reserved attributes that cannot be used to building namespace labels.
 
-    1. `separator` which is used to configure what string will be used to separate spaces
-    2. Any [dunder methods/attributes](https://stackoverflow.com/questions/1418825/where-is-the-python-documentation-for-the-special-methods-init-new)
+1. Any [dunder methods/attributes](https://stackoverflow.com/questions/1418825/where-is-the-python-documentation-for-the-special-methods-init-new) (It's best just to avoid building anything with a start of a double underscore)
+2. Any of these common string attributes
 
-It's best just to avoid building anything with a start of a double underscore
+<pre>
+['capitalize', 'casefold', 'count', 'encode', 'endswith',
+ 'find', 'index', 'isalnum', 'isalpha', 'isdecimal',
+ 'isdigit', 'isidentifier', 'islower', 'isnumeric', 'isprintable',
+ 'isspace', 'istitle', 'isupper', 'ljust', 'lower',
+ 'lstrip', 'partition', 'replace', 'rfind', 'rindex',
+ 'rjust', 'rpartition', 'rstrip', 's', 'separator',
+ 'startswith', 'strip', 'swapcase', 'title', 'translate', 'upper', 'zfill']
+</pre>
 
 ### Fun examples
 
@@ -140,6 +148,24 @@ D = {}
 
 for i in range(10):
     D[S.data.s(i)] = randint(0,10)
+```
 
+make a bunch of files with a name schema, then easily filter them
 
+``` python
+from uuid import uuid4
+from pathlib import Path as Pth
+import tempfile as tmpf
+from snakespace import SnakeSpace
+
+S = SnakeSpace(separator='/')
+tmp_dir = tmpf.TemporaryDirectory()
+
+## Make some files
+for i in range(10):
+    Pth(S.s(tmp_dir.name,uuid4())).touch()
+
+for f in Pth(tmp_dir.name).iterdir():
+    if S.a < S(f.parts[-1]) < S.z:
+        print(f)
 ```
