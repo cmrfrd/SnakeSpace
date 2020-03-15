@@ -65,7 +65,7 @@ def test_separator_snakespace_access():
     assert (S.separator == "_")
     S.separator = "."
     assert (S.separator == ".")
-    
+
 def test_sep_snakespace():
     S = SnakeSpace()
     S.separator = "_"
@@ -96,20 +96,20 @@ def test_suffix_snakespace():
     assert (S.a.b.c == "a.b.c@")
     assert (S.a.s().c == "a.c@")
     assert (S.a.s(1,2).c == "a.1.2.c@")
-    
+
 def test_snakespace_casting_and_operators():
     S = SnakeSpace()
 
     # casting
-    assert (int(S.s(1)) == 1)    
+    assert (int(S.s(1)) == 1)
     with pytest.raises(ValueError):
         int(S.a)
 
-    assert (float(S.s(1.0)) == 1.0)    
+    assert (float(S.s(1.0)) == 1.0)
     with pytest.raises(ValueError):
         float(S.a)
 
-    assert (complex(S.s(1.0)) == 1.0+0j)    
+    assert (complex(S.s(1.0)) == 1.0+0j)
     with pytest.raises(ValueError):
         complex(S.a)
 
@@ -166,10 +166,18 @@ def test_snakespace_casting_and_operators():
     assert (S.a % S.b == False)
     assert (S.b % S.a == False)
     assert (S.a % S.a == True)
-    assert (S.a.b % S.a == True)
-    assert (S.a.b.c % S.a == True)
-    assert (S.a.b.c % S.a.b == True)
-    assert (("a.b.c" % S.a.b) == "a.b.c")
+    assert (S.a.b % S.a == False)
+    assert (S.a % S.a.b == True)
+    assert (S.a.b.c % S.a == False)
+    assert (S.a % S.a.b.c == True)
+    assert (S.a.b.c % "a.b.c" == True)
+    assert (S.a % "a" == True)
+    assert (S.a.b.c % "a.b.c" == True)
+    print(S.a.b.c, "a.b.c")
+    assert (("a.b.c" % S.a.b) == "a.b.c") # edge case str formatting
+    Q = SnakeSpace(separator="/")
+    assert (S.a % Q.a.b.c == True)
+    assert (Q.a.b.c % "a/b/c" == True)
 
 def test_snakespace_str_methods():
 
@@ -178,7 +186,7 @@ def test_snakespace_str_methods():
     assert (S.a.b.c.capitalize() == S.A.B.C)
     S.separator = 'a'
     assert (S.a.b.c.capitalize() == "AaBaC")
-    S.separator = '.'    
+    S.separator = '.'
     S = SnakeSpace(prefix='a')
     assert (S.a.b.c.capitalize() == "aA.B.C")
     S = SnakeSpace(suffix='a')
@@ -189,7 +197,7 @@ def test_snakespace_str_methods():
     assert (S.A.B.C.casefold() == S.a.b.c)
     S.separator = 'a'
     assert (S.A.B.C.casefold() == "aabac")
-    S.separator = '.'    
+    S.separator = '.'
     S = SnakeSpace(prefix='a')
     assert (S.A.B.C.casefold() == "aa.b.c")
     S = SnakeSpace(suffix='a')
@@ -235,19 +243,13 @@ def test_snakespace_str_methods():
     S = SnakeSpace()
     assert (S.a.b.c.isalpha() == True)
     assert (S.a.s(1,2,3).c.isalpha() == False)
-    
+
     # isalnum
     S = SnakeSpace()
     assert (S.a.b.c.isalnum() == True)
     assert (S.a.s(1,2,3).c.isalnum() == True)
     assert (S.a.s(1,2,3, d="#").c.isalnum() == False)
 
-    # isascii
-    S = SnakeSpace()
-    assert (S.a.b.c.isascii() == True)
-    assert (S.a.s(1,2,3).c.isascii() == True)
-    assert (S.a.s(1,2,3, d="Â").c.isascii() == False)
-    
     # isdecimal
     S = SnakeSpace()
     assert (S.a.b.c.isdecimal() == False)
@@ -340,7 +342,7 @@ def test_snakespace_str_methods():
     assert (S.a.b.c.replace(S.b, S.c) == S.a.c.c)
     assert (S.a.b.c.replace('b', 'c') == S.a.c.c)
     assert (S.yay.s(1,2,3).b.c.replace(1, 2) == S.yay.s(2,2,3).b.c)
-        
+
 
     # rfind
     S = SnakeSpace()
@@ -386,7 +388,7 @@ def test_snakespace_str_methods():
     assert (S.a.b.c.startswith(S.b.c) == False)
     assert (S.a.b.c.startswith("a.b.c") == True)
     assert (S.a.b.c.startswith("b.c") == False)
-    
+
     # rstrip
     S = SnakeSpace()
     assert (S.s('a ').s('b ').s('c ').rstrip() == S.a.b.c)

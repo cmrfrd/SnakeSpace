@@ -8,14 +8,14 @@ class SnakeSpace(_collections_abc.Sequence):
 
     SnakeSpaces can also be operated on with other SnakeSpaces like namespaces
     """
-    
+
     def __init__(self, seq=[], separator='.', prefix=False, suffix=False):
         """Initialize a SnakeSpace object
         """
 
         self.__separator = separator
 
-        ## Initialize 
+        ## Initialize
         if isinstance(seq, str):
             self.___data = seq.split(separator)
         elif isinstance(seq, SnakeSpace):
@@ -34,30 +34,33 @@ class SnakeSpace(_collections_abc.Sequence):
             self.__suffix = __separator if suffix else ""
         else:
             self.__suffix = suffix
-    
+
+    def __call__(self, *args, **kwargs):
+        return SnakeSpace(*args, **kwargs)
+
     @property
     def separator(self):
         """separator is the value between each piece of data
         """
         return self.__separator
-    
+
     @separator.setter
     def separator(self, val):
         """set the value for the separator
         """
         self.__separator = val
-    
+
     @property
     def __data(self):
         """Accessing the data joins it as a string
         """
         return self.__prefix + self.__separator.join(self.___data) + self.__suffix
-        
+
     def __getattr__(self, attr):
         """Getting an attribute creates a new copy of SnakeSpace adding the attribute
         """
         return SnakeSpace(self.___data + [attr], self.__separator, self.__prefix, self.__suffix)
-        
+
     def s(self, *args, **kwargs):
         """Create a new SnakeSpace adding the string representation of args/kwargs
         """
@@ -71,7 +74,7 @@ class SnakeSpace(_collections_abc.Sequence):
                           self.__separator,
                           self.__prefix,
                           self.__suffix)
-    
+
     def __str__(self):
         """Return the string representation of the data
         """
@@ -81,6 +84,9 @@ class SnakeSpace(_collections_abc.Sequence):
         """Return the representation of the data
         """
         return repr(self.__data)
+
+    def __fspath__(self):
+        return str(self.__data)
 
     def __int__(self):
         """Return the int representation of the data
@@ -101,7 +107,7 @@ class SnakeSpace(_collections_abc.Sequence):
         """Return the hash representation of the data
         """
         return hash(self.__data)
-    
+
     def __eq__(self, string):
         """Equate SnakeSpace data or the string
         """
@@ -113,35 +119,35 @@ class SnakeSpace(_collections_abc.Sequence):
         """Opposite of eq
         """
         return not (self.__data == string)
-    
+
     def __lt__(self, string):
         """Compare SnakeSpace data or string
         """
         if isinstance(string, SnakeSpace):
             return self.__data < string.__data
         return self.__data < string
-    
+
     def __le__(self, string):
         """Compare SnakeSpace data or string
         """
         if isinstance(string, SnakeSpace):
             return self.__data <= string.__data
         return self.__data <= string
-    
+
     def __gt__(self, string):
         """Compare SnakeSpace data or string
         """
         if isinstance(string, SnakeSpace):
             return self.__data > string.__data
         return self.__data > string
-    
+
     def __ge__(self, string):
         """Compare SnakeSpace data or string
         """
         if isinstance(string, SnakeSpace):
             return self.__data >= string.__data
         return self.__data >= string
-    
+
     def __contains__(self, char):
         """Compare SnakeSpace data or string
         """
@@ -153,12 +159,12 @@ class SnakeSpace(_collections_abc.Sequence):
         """Get the length not of the string, but of the underlying data
         """
         return len(self.___data)
-    
+
     def __getitem__(self, index):
         """Get the item not of the string but the underlying data
         """
         return self.___data[index]
-    
+
     def __add__(self, other):
         """Add SnakeSpace data together, otherwise string concat
         """
@@ -180,10 +186,12 @@ class SnakeSpace(_collections_abc.Sequence):
         return str(other) + self.__data
 
     def __mod__(self, args):
-        """Check if arg is the start of a snakespace without the prefix
+        """Check if arg is a superspace of the current snakespace, ignoring seperator
         """
-        return self.startswith(args)
-    
+        if isinstance(args, SnakeSpace):
+            return args.startswith(self)
+        return args.startswith(str(self))
+
     # the following methods are defined in alphabetical order:
     def capitalize(self):
         return SnakeSpace(list(s.capitalize() for s in self.___data),
@@ -229,9 +237,6 @@ class SnakeSpace(_collections_abc.Sequence):
 
     def isalnum(self):
         return all(map(lambda s:s.isalnum(), self.___data))
-
-    def isascii(self):
-        return all(map(lambda s:s.isascii(), self.___data))
 
     def isdecimal(self):
         return all(map(lambda s:s.isdecimal(), self.___data))
@@ -289,7 +294,7 @@ class SnakeSpace(_collections_abc.Sequence):
                           self.__suffix)
 
     def replace(self, old, new, maxsplit=sys.maxsize):
-        """Replace spaces in SnakeSpace that match 'old' with 'new' in the same position 
+        """Replace spaces in SnakeSpace that match 'old' with 'new' in the same position
         """
         indexes = list(i for i, s in enumerate(self.___data)
                        if s.find(str(old)) >= 0)
@@ -303,7 +308,7 @@ class SnakeSpace(_collections_abc.Sequence):
         """
         return next((i for i, s in reversed(list(enumerate(self.___data)))
                      if s[start:end].find(str(sub)) >= 0), -1)
-    
+
     def rindex(self, sub, start=0, end=sys.maxsize):
         """Index which space sub can be found in, from the right
         """
@@ -333,7 +338,7 @@ class SnakeSpace(_collections_abc.Sequence):
         return SnakeSpace(list(s.rstrip() for s in self.___data),
                           self.__separator,
                           self.__prefix,
-                          self.__suffix)    
+                          self.__suffix)
 
     def startswith(self, prefix, start=0, end=sys.maxsize):
         """Same at str.startswith but with string representation of __data
@@ -350,7 +355,7 @@ class SnakeSpace(_collections_abc.Sequence):
         return SnakeSpace(list(s.strip(chars) for s in self.___data),
                           self.__separator,
                           self.__prefix,
-                          self.__suffix)    
+                          self.__suffix)
 
     def swapcase(self):
         return SnakeSpace(list(s.swapcase() for s in self.___data),
@@ -363,7 +368,7 @@ class SnakeSpace(_collections_abc.Sequence):
                           self.__separator,
                           self.__prefix,
                           self.__suffix)
-        
+
     def translate(self, *args):
         space = list(s.translate(s.maketrans(*map(str,args)))
                      for s in self.___data
