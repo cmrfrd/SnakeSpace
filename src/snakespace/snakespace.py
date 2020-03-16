@@ -36,7 +36,18 @@ class SnakeSpace(_collections_abc.Sequence):
             self.__suffix = suffix
 
     def __call__(self, *args, **kwargs):
-        return SnakeSpace(*args, **kwargs)
+        """Call any snakespace attribute to act the same as s
+        """
+        result_str = list(args) + list(kwargs.values())
+        if len(result_str):
+            return SnakeSpace(SnakeSpace(self.___data + list(map(str, result_str))),
+                              self.__separator,
+                              self.__prefix,
+                              self.__suffix)
+        return SnakeSpace(self.___data,
+                          self.__separator,
+                          self.__prefix,
+                          self.__suffix)
 
     @property
     def separator(self):
@@ -59,7 +70,10 @@ class SnakeSpace(_collections_abc.Sequence):
     def __getattr__(self, attr):
         """Getting an attribute creates a new copy of SnakeSpace adding the attribute
         """
-        return SnakeSpace(self.___data + [attr], self.__separator, self.__prefix, self.__suffix)
+        return SnakeSpace(self.___data + [attr],
+                          self.__separator,
+                          self.__prefix,
+                          self.__suffix)
 
     def s(self, *args, **kwargs):
         """Create a new SnakeSpace adding the string representation of args/kwargs

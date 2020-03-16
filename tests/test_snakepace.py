@@ -22,6 +22,12 @@ def test_init_snakespace():
     assert (S[1] == "what")
     assert (S[2] == "up")
 
+def test_fspath():
+    S = SnakeSpace()
+    assert (S == "")
+    assert (S.__fspath__() == "")
+    assert (S.__fspath__() != " ")
+
 def test_attrchain_snakespace():
     S = SnakeSpace()
     assert (S.a  == "a")
@@ -178,6 +184,20 @@ def test_snakespace_casting_and_operators():
     Q = SnakeSpace(separator="/")
     assert (S.a % Q.a.b.c == True)
     assert (Q.a.b.c % "a/b/c" == True)
+
+def test_snakespace_call():
+
+    # __call__
+    S = SnakeSpace()
+    assert (S() == "")
+    assert (S.s() == "")
+    assert (S.a() == "a")
+    assert (S.a() == S.a)
+    assert (S.a().b().c() == "a.b.c")
+    assert (S.a().b().c() == S.a.b.c)
+    assert (S.a(1,2,3).b().c() == "a.1.2.3.b.c")
+    assert (S.a(1,2,3).b().c() == S.a.s(1,2,3).b.c)
+    assert (S.a(1,2,a=3).b().c() == "a.1.2.3.b.c")
 
 def test_snakespace_str_methods():
 
