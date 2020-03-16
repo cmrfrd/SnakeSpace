@@ -5,7 +5,10 @@
 ▀▀▀ ▀░░▀ ▀░░▀ ▀░▀ ▀▀▀ ▀▀▀ █▀▀▀ ▀░░▀ ▀▀▀ ▀▀▀  <____/     \____/
 </pre>
 
-[![Actions Status](https://github.com/cmrfrd/SnakeSpace/workflows/pypi/badge.svg)](https://github.com/cmrfrd/SnakeSpace/actions) [![codecov](https://codecov.io/gh/cmrfrd/SnakeSpace/branch/master/graph/badge.svg)](https://codecov.io/gh/cmrfrd/SnakeSpace) [![PyPI version](https://badge.fury.io/py/snakespace.svg)](https://badge.fury.io/py/snakespace)
+[![Actions Status](https://github.com/cmrfrd/SnakeSpace/workflows/pypi/badge.svg)](https://github.com/cmrfrd/SnakeSpace/actions)
+[![codecov](https://codecov.io/gh/cmrfrd/SnakeSpace/branch/master/graph/badge.svg)](https://codecov.io/gh/cmrfrd/SnakeSpace)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/snakespace)
+[![PyPI version](https://badge.fury.io/py/snakespace.svg)](https://badge.fury.io/py/snakespace)
 
 # SnakeSpace
 
@@ -169,3 +172,9 @@ for f in Pth(tmp_dir.name).iterdir():
     if S.a < S(f.parts[-1]) < S.z:
         print(f)
 ```
+
+### Releasing
+
+1. `bump2version`
+2. push tag release
+3. check gha
